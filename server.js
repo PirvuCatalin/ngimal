@@ -4,6 +4,8 @@ const path = require('path');
 
 const app = express();
 
+app.use('/api', 'https://mysterious-reef.herokuapp.com')
+
 app.use(express.static(path.join(__dirname, '/dist/ngimal')));
 
 app.get('*', (req, res) => {
