@@ -9,17 +9,12 @@ app.use(cors());
 
 app.options('*', cors());
 
-app.use(express.static(path.join(__dirname, '/dist/ngimal')));
-
-app.get("/api", (req, res) => {
-    const url = 'https://mysterious-reef.herokuapp.com';
-    request(url).pipe(res);
-  });
-
-app.use((req, res, next) => {
+app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     next();
 });
+
 
 const port = process.env.PORT || 3000;
 app.set('port', port);
