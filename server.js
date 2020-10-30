@@ -19,6 +19,7 @@ app.use(function (req, res, next) {
     return next();
 });
 
+app.use('/api/', 'https://mysterious-reef.herokuapp.com/');
 
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/dist/ngimal/index.html'));
