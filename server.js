@@ -4,17 +4,22 @@ const path = require('path');
 
 const app = express();
 
-app.use(express.static(path.join(__dirname, '/dist/ngimal')));
+var port = process.env.PORT || 3000;
 
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
+app.set('port', (port));
+
+var server = http.createServer(app).listen(port, function() {
+    console.log('Server listening on port ' + port);
+  });
+  app.use(bodyParser.urlencoded({extended: true}));
+  
+  app.use(function (req, res, next) {
+      res.setHeader('Access-Control-Allow-Origin', '*');
+      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+      res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
+      next();
+  });
+
+  app.get('/', (req, res) => {
+    res.send('Welcome to your server.');
 });
-
-
-const port = process.env.PORT || 3000;
-app.set('port', port);
-
-const server = http.createServer(app);
-server.listen(port, () => console.log('running'));
