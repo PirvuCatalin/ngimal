@@ -33,6 +33,11 @@ export class AnimalService {
     this.http.get<ResultInterface>(this.singleAnimalUrl).subscribe(data => {
         console.log(data.result);
     });
+
+    this.http.get<ResultInterface>("https://mysterious-reef.herokuapp.com/get_thingy").subscribe(data => {
+      console.log(data.result);
+    });
+
     return of(this.localAnimal);
     // return this.http.get<ResultInterface>(this.singleAnimalUrl).pipe(
 
