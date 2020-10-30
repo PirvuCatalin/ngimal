@@ -67,8 +67,7 @@
           },
           "configurations": {
             "production": {
-              "browserTarget": "ngimal:build:production",
-              "proxyConfig": "src/proxy.conf.json"
+              "browserTarget": "ngimal:build:production"
             }
           }
         },
