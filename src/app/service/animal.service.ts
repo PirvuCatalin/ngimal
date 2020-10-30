@@ -30,8 +30,8 @@ export class AnimalService {
   }
 
   getSingleAnimal(): Observable<Animal> {
-    this.http.get<any>(this.singleAnimalUrl).subscribe(data => {
-        console.log(data);
+    this.http.get<ResultInterface>(this.singleAnimalUrl).subscribe(data => {
+        console.log(data.result);
     });
     return of(this.localAnimal);
     // return this.http.get<ResultInterface>(this.singleAnimalUrl).pipe(
