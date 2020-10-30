@@ -1,28 +1,34 @@
 const express = require('express');
-const http = require('http')
 const path = require('path');
-var cors = require('cors');
+const cors = require('cors');
 
 const app = express();
 
-app.use(cors());
+// add this code
+const whitelist = ['https://mysterious-reef.herokuapp.com']; // list of allow domain
 
-app.options('*', cors());
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
 
-app.use(express.static(path.join(__dirname, '/dist/ngimal')));
+        if (whitelist.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}
 
-app.get("/api", (req, res) => {
-    const url = 'https://mysterious-reef.herokuapp.com';
-    request(url).pipe(res);
-  });
+// end 
+app.use(cors(corsOptions));
 
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "*");
-    next();
+app.use(express.static('./dist/ngimal'));
+
+app.get('/',function(req,res){
+    res.sendFile(path.join(__dirname+'/dist/ngimal/index.html'));
 });
 
-const port = process.env.PORT || 3000;
-app.set('port', port);
-
-const server = http.createServer(app);
-server.listen(port, () => console.log('running'));
+app.listen(process.env.PORT || 8080);
