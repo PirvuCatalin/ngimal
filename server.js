@@ -11,12 +11,14 @@ app.options('*', cors());
 
 app.use(express.static(path.join(__dirname, '/dist/ngimal')));
 
-app.get('/api', function (req, res, next) {
-    res.json({msg: 'This is CORS-enabled for all origins!'})
-  })
+app.get("/api", (req, res) => {
+    const url = 'https://mysterious-reef.herokuapp.com';
+    request(url).pipe(res);
+  });
 
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname + '/dist/ngimal/index.html'));
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    next();
 });
 
 const port = process.env.PORT || 3000;
