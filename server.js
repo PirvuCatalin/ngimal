@@ -1,6 +1,7 @@
 const express = require('express');
 const http = require('http')
 const path = require('path');
+var bodyParser = require('body-parser');
 
 const app = express();
 
@@ -22,4 +23,4 @@ var server = http.createServer(app).listen(port, function() {
 
   app.get('/', (req, res) => {
     res.send('Welcome to your server.');
-});
+});;
