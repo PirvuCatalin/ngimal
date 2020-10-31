@@ -1,29 +1,34 @@
 const express = require('express');
-const http = require('http')
 const path = require('path');
-var bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
 
-var port = process.env.PORT || 3000;
+// add this code
+const whitelist = ['https://mysterious-reef.herokuapp.com']; // list of allow domain
 
-app.set('port', (port));
+const corsOptions = {
+    origin: function (origin, callback) {
+        if (!origin) {
+            return callback(null, true);
+        }
 
-var server = http.createServer(app).listen(port, function() {
-    console.log('Server listening on port ' + port);
-  });
-  app.use(bodyParser.urlencoded({extended: true}));
-  
-  var distDir = __dirname + "/dist/ngimal";
-  app.use(express.static(distDir));
+        if (whitelist.indexOf(origin) === -1) {
+            var msg = 'The CORS policy for this site does not ' +
+                'allow access from the specified Origin.';
+            return callback(new Error(msg), false);
+        }
+        return callback(null, true);
+    }
+}
 
-  app.use(function (req, res, next) {
-      res.setHeader('Access-Control-Allow-Origin', '*');
-      res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-      res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
-      next();
-  });
+// end 
+app.use(cors(corsOptions));
 
-  app.get('/', (req, res) => {
-    res.send('Welcome to your server.');
-});;
+app.use(express.static('./dist/ngimal'));
+
+app.get('/',function(req,res){
+    res.sendFile(path.join(__dirname+'/dist/ngimal/index.html'));
+});
+
+app.listen(process.env.PORT || 8080);
