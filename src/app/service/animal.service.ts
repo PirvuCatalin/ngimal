@@ -1,24 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { ANIMALS } from '../mock/mock-animals';
-import { Animal } from '../model/animal';
 import { catchError, map, tap } from 'rxjs/operators';
 import { ResultInterface } from '../model/resultInterface';
+import { plainToClass } from 'class-transformer';
+import { Animal } from '../model/animal';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class AnimalService {
   private animalsUrl = '/api/heroes';
-  private singleAnimalUrl = '/api/get_thingy';
-
-  localAnimal: Animal = {
-    _id: "test",
-    color: "Blue",
-    weight: 34,
-    height: 27
-  };
+  private singleAnimalUrl = 'https://mysterious-reef.herokuapp.com/get_thingy';
 
   constructor(private http: HttpClient) { }
 
@@ -29,39 +23,12 @@ export class AnimalService {
       );
   }
 
+  
+
   getSingleAnimal(): Observable<Animal> {
-    const headerDict = {
-      'Content-Type': 'application/json',
-      'Accept': 'application/json',
-      'Access-Control-Allow-Headers': 'Content-Type',
-      'Access-Control-Allow-Origin': '*'
-    }
-    
-    const requestOptions = {                                                                                                                                                                                 
-      headers: new HttpHeaders(headerDict), 
-    };
-    
-    this.http.get<ResultInterface>("https://mysterious-reef.herokuapp.com/get_thingy", requestOptions).subscribe(data => {
-      console.log(data.result);
-    });
-
-    this.http.get<ResultInterface>(this.singleAnimalUrl).subscribe(data => {
-        console.log(data.result);
-    });
-
-    this.http.get<ResultInterface>("https://mysterious-reef.herokuapp.com/get_thingy").subscribe(data => {
-      console.log(data.result);
-    });
-
-    return of(this.localAnimal);
-    // return this.http.get<ResultInterface>(this.singleAnimalUrl).pipe(
-
-    //   // As HttpClient cares only about the structure, you still need to loop 
-    //   // through the returned data and create a classes if you want the method to return
-    //   // a list of SearchResult classes.
-    //   // CustomResultInterface is your custom interface that carries only the structure of the response
-    //   map(results => this.localAnimal)
-    // ); 
+    return this.http.get<ResultInterface>(this.singleAnimalUrl).pipe(
+        map(results => plainToClass(Animal, results.result as Object))
+      );
   }
 
   /**
