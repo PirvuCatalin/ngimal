@@ -14,6 +14,9 @@ var server = http.createServer(app).listen(port, function() {
   });
   app.use(bodyParser.urlencoded({extended: true}));
   
+  var distDir = __dirname + "/dist/ngimal";
+  app.use(express.static(distDir));
+
   app.use(function (req, res, next) {
       res.setHeader('Access-Control-Allow-Origin', '*');
       res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
