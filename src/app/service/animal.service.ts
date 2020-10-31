@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ANIMALS } from '../mock/mock-animals';
@@ -30,6 +30,21 @@ export class AnimalService {
   }
 
   getSingleAnimal(): Observable<Animal> {
+    const headerDict = {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Origin': '*'
+    }
+    
+    const requestOptions = {                                                                                                                                                                                 
+      headers: new HttpHeaders(headerDict), 
+    };
+    
+    this.http.get<ResultInterface>("https://mysterious-reef.herokuapp.com/get_thingy", requestOptions).subscribe(data => {
+      console.log(data.result);
+    });
+
     this.http.get<ResultInterface>(this.singleAnimalUrl).subscribe(data => {
         console.log(data.result);
     });
