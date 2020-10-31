@@ -11,7 +11,11 @@ import { Animal } from '../../model/animal';
 export class AnimalsComponent implements OnInit {
   animals: Animal[];
 
-  animal: Animal;
+  animal: Animal = {
+    color: '',
+    weight: null,
+    height: null
+  };
 
   constructor(private animalService: AnimalService) { 
   }
